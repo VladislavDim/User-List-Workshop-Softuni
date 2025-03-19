@@ -1,7 +1,19 @@
+import { useEffect } from "react";
+
+import userService from "../api/userService.js";
+
 import Search from "./Search.jsx";
 import UserListItem from "./UserListItem.jsx";
 
 export default function UserList() {
+
+    useEffect(() => {
+        userService.getAll()
+            .then(result => {
+                console.log(result);
+            })
+    }, []);
+
     return (
         <section className="card users-container">
             <Search />
