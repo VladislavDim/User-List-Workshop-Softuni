@@ -21,12 +21,17 @@ export default function UserList() {
     const addUserClickHandler = () => {
         setShowCreate(true);
     }
+
+    const closeUserCreateModal = () => {
+        setShowCreate(false);
+    }
+
     return (
         <section className="card users-container">
 
             <Search />
 
-            {showCreate && <UserCreate />}
+            {showCreate && <UserCreate onClose={closeUserCreateModal} />}
 
             {/* Table component */}
             <div className="table-wrapper">
