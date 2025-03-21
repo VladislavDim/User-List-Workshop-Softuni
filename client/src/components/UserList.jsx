@@ -5,11 +5,13 @@ import userService from "../api/userService.js";
 import Search from "./Search.jsx";
 import UserListItem from "./UserListItem.jsx";
 import UserCreate from "./UserCreate.jsx";
+import UserInfo from "./UserInfo.jsx";
 
 export default function UserList() {
 
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
+    const [userIdInfo, setUserIdInfo] = useState();
 
     useEffect(() => {
         userService.getAll()
@@ -20,11 +22,11 @@ export default function UserList() {
 
     const addUserClickHandler = () => {
         setShowCreate(true);
-    }
+    };
 
     const closeCreateUserClickHandler = () => {
         setShowCreate(false);
-    }
+    };
 
     const saveCreateUserClickHandler = async (e) => {
         e.preventDefault();
@@ -39,18 +41,28 @@ export default function UserList() {
         setShowCreate(false);
     };
 
+    const userInfoClickHandler = (userId) => {
+        setUserIdInfo(userId);
+    };
+
     return (
         <section className="card users-container">
 
             <Search />
 
-            {showCreate &&
+            {showCreate && (
                 <UserCreate
                     onClose={closeCreateUserClickHandler}
                     onSave={saveCreateUserClickHandler}
-                />}
+                />)
+            }
 
-            {/* Table component */}
+            {userIdInfo && (
+                <UserInfo
+                    userId={userIdInfo}
+                />
+            )}
+
             <div className="table-wrapper">
                 {/* Overlap components  */}
                 {/* <div class="loading-shade"> */}
@@ -215,6 +227,7 @@ export default function UserList() {
                     <tbody>
                         {users.map(user => <UserListItem
                             key={user._id}
+                            onInfoClick={userInfoClickHandler}
                             {...user}
                         />)}
                     </tbody>
