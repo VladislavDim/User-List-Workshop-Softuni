@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
+import userService from "../api/userService";
+
 export default function UserCreate({
+    userId,
     onClose,
-    onSave
+    onSave,
+    onEdit
 }) {
     return (
         <div className="overlay">
@@ -95,7 +100,9 @@ export default function UserCreate({
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button id="action-save" className="btn" type="submit">Save</button>
+                            {userId
+                                ? <button id="action-save" className="btn" type="submit" onClick={onEdit}>Edit</button>
+                                : <button id="action-save" className="btn" type="submit" onClick={onSave}>Save</button>}
                             <button id="action-cancel" className="btn" type="button" onClick={onClose}>
                                 Cancel
                             </button>
