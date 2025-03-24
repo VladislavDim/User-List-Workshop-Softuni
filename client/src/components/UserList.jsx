@@ -7,10 +7,12 @@ import UserListItem from "./UserListItem.jsx";
 import UserCreate from "./UserCreate.jsx";
 import UserInfo from "./UserInfo.jsx";
 import UserDelete from "./UserDelete.jsx";
+import { getSortFunction } from "../utils/sortUtils.js";
 
 export default function UserList() {
 
     const [users, setUsers] = useState([]);
+    const [displayUsers, setDisplayUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [userIdInfo, setUserIdInfo] = useState(null);
     const [userIdDelete, setUserIdDelete] = useState(null);
@@ -22,6 +24,10 @@ export default function UserList() {
                 setUsers(result);
             })
     }, []);
+
+    useEffect(() => {
+        setDisplayUsers(users);
+    }, [users]);
 
     const addUserClickHandler = () => {
         setShowCreate(true);
@@ -65,6 +71,13 @@ export default function UserList() {
         setUserIdEdit(userId);
     };
 
+    const userSortClickHandler = (e) => {
+        const key = e.target.textContent.trim();
+        const sortedFunc = getSortFunction(key);
+        console.log(users.sort(sortedFunc));
+        setDisplayUsers(state => [...users].sort(sortedFunc));
+    };
+
     const userDeleteHandler = async () => {
         await userService.delete(userIdDelete);
 
@@ -105,7 +118,9 @@ export default function UserList() {
     return (
         <section className="card users-container">
 
-            <Search />
+            <Search
+                onSearch={userSearchClickHandler}
+            />
 
             {showCreate && (
                 <UserCreate
@@ -205,7 +220,7 @@ export default function UserList() {
                     <thead>
                         <tr>
                             <th>Image</th>
-                            <th>
+                            <th onClick={(e) => userSortClickHandler(e)}>
                                 First name
                                 <svg
                                     aria-hidden="true"
@@ -223,7 +238,7 @@ export default function UserList() {
                                     ></path>
                                 </svg>
                             </th>
-                            <th>
+                            <th onClick={(e) => userSortClickHandler(e)}>
                                 Last name
                                 <svg
                                     aria-hidden="true"
@@ -241,7 +256,7 @@ export default function UserList() {
                                     ></path>
                                 </svg>
                             </th>
-                            <th>
+                            <th onClick={(e) => userSortClickHandler(e)}>
                                 Email
                                 <svg
                                     className="icon"
@@ -259,7 +274,7 @@ export default function UserList() {
                                     ></path>
                                 </svg>
                             </th>
-                            <th>
+                            <th onClick={(e) => userSortClickHandler(e)}>
                                 Phone
                                 <svg
                                     aria-hidden="true"
@@ -277,7 +292,7 @@ export default function UserList() {
                                     ></path>
                                 </svg>
                             </th>
-                            <th>
+                            <th onClick={(e) => userSortClickHandler(e)}>
                                 Created
                                 <svg
                                     aria-hidden="true"
@@ -299,7 +314,7 @@ export default function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => <UserListItem
+                        {displayUsers.map(user => <UserListItem
                             key={user._id}
                             onInfoClick={userInfoClickHandler}
                             onDeleteClick={userDeleteClickHandler}
