@@ -73,6 +73,23 @@ export default function UserList() {
         setUserIdDelete(null);
     };
 
+    const userSearchClickHandler = (inputValue, selectedCriteria) => {
+
+        if (inputValue === '' || selectedCriteria === 'notSelected') {
+            userService.getAll()
+                .then(result => {
+                    setUsers(result);
+                })
+            return;
+        }
+
+        const regex = new RegExp(inputValue, 'i');
+
+        setUsers(state => state.filter(u => {
+            return regex.test(u[selectedCriteria] || '');
+        }));
+    };
+
     const saveEditUserClickHandler = async (e) => {
         e.preventDefault();
 

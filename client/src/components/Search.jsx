@@ -1,4 +1,24 @@
-export default function Search() {
+import { useState } from "react";
+
+export default function Search({
+    onSearch
+}) {
+    const [inputValue, setInputValue] = useState(""); 
+    const [selectedCriteria, setSelectedCriteria] = useState(""); 
+
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+    };
+
+    const handleCriteriaChange = (e) => {
+        setSelectedCriteria(e.target.value);
+    };
+
+    const handleSearchClick = (e) => {
+        e.preventDefault(); 
+        onSearch(inputValue, selectedCriteria);
+    };
+
     return (
         <form className="search-form">
             <h2>
@@ -22,27 +42,45 @@ export default function Search() {
             <div className="search-input-container">
                 <input
                     type="text"
-                    placeholder="Please, select the search criteria"
+                    placeholder="Please, enter search term"
                     name="search"
+                    value={inputValue}
+                    onChange={handleInputChange}
                 />
                 {/* Show the clear button only if input field length !== 0 */}
-                <button className="btn close-btn">
+                <button
+                    className="btn close-btn"
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setInputValue("")
+                    }} // Изчистваме input полето
+                    style={{ display: inputValue ? "block" : "none" }} // Скриваме бутона, ако няма стойност в input
+                >
                     <i className="fa-solid fa-xmark" />
                 </button>
-                <button className="btn" title="Please, select the search criteria">
+                <button
+                    className="btn"
+                    title="Search"
+                    onClick={handleSearchClick} // Извикваме onSearch при натискане на бутона
+                >
                     <i className="fa-solid fa-magnifying-glass" />
                 </button>
             </div>
             <div className="filter">
                 <span>Search Criteria:</span>
-                <select name="criteria" className="criteria">
-                    <option value="">Not selected</option>
-                    <option value="">First Name</option>
-                    <option value="">Last Name</option>
-                    <option value="">Email</option>
-                    <option value="">Phone</option>
+                <select
+                    name="criteria"
+                    className="criteria"
+                    value={selectedCriteria}
+                    onChange={handleCriteriaChange}
+                >
+                    <option value="notSelected">Not selected</option>
+                    <option value="firstName">First Name</option>
+                    <option value="lastName">Last Name</option>
+                    <option value="email">Email</option>
+                    <option value="phoneNumber">Phone</option>
                 </select>
             </div>
         </form>
     );
-};
+}
