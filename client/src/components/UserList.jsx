@@ -74,8 +74,7 @@ export default function UserList() {
     const userSortClickHandler = (e) => {
         const key = e.target.textContent.trim();
         const sortedFunc = getSortFunction(key);
-        console.log(users.sort(sortedFunc));
-        setDisplayUsers(state => [...users].sort(sortedFunc));
+        setDisplayUsers(state => [...state].sort(sortedFunc));
     };
 
     const userDeleteHandler = async () => {
@@ -89,16 +88,13 @@ export default function UserList() {
     const userSearchClickHandler = (inputValue, selectedCriteria) => {
 
         if (inputValue === '' || selectedCriteria === 'notSelected') {
-            userService.getAll()
-                .then(result => {
-                    setUsers(result);
-                })
+            setDisplayUsers(users);
             return;
         }
 
         const regex = new RegExp(inputValue, 'i');
 
-        setUsers(state => state.filter(u => {
+        setDisplayUsers(() => users.filter(u => {
             return regex.test(u[selectedCriteria] || '');
         }));
     };
