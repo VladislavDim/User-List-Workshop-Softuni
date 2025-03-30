@@ -18,6 +18,9 @@ export default function UserList() {
     const [userIdInfo, setUserIdInfo] = useState(null);
     const [userIdDelete, setUserIdDelete] = useState(null);
     const [userIdEdit, setUserIdEdit] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [usersPerPage, setUsersPerPage] = useState(5);
+    const [currentUsers, setCurrentUsers] = useState([]);
 
     useEffect(() => {
         userService.getAll()
@@ -29,6 +32,10 @@ export default function UserList() {
     useEffect(() => {
         setDisplayUsers(users);
     }, [users]);
+
+    useEffect(() => {
+        setCurrentUsers(displayUsers.slice((currentPage - 1) * usersPerPage, usersPerPage * currentPage))
+    }, [usersPerPage, currentPage, displayUsers]);
 
     const addUserClickHandler = () => {
         setShowCreate(true);
@@ -314,7 +321,7 @@ export default function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {displayUsers.map(user => <UserListItem
+                        {currentUsers.map(user => <UserListItem
                             key={user._id}
                             onInfoClick={userInfoClickHandler}
                             onDeleteClick={userDeleteClickHandler}
@@ -326,6 +333,10 @@ export default function UserList() {
             </div>
             <button className="btn-add btn" onClick={addUserClickHandler}>Add new user</button>
             <Pagination
+                usersPerPage
+                users
+                setCurrentPage={setCurrentPage}
+                setUsersPerPage={setUsersPerPage}
             />
         </section>
     );

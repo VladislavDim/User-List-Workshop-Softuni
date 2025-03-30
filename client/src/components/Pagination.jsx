@@ -1,12 +1,23 @@
 export default function Pagination({
+    usersPerPage,
+    users,
+    setCurrentPage,
+    setUsersPerPage
 }) {
 
+    const pageChangeHandler = (value) => {
+        setCurrentPage(state => state + value);
+    };
+
+    const changeUsersPerPageHandler = (e) => {
+        setUsersPerPage(e.target.value);
+    };
 
     return (
         <div className="pagination position">
             <div className="limits">
                 <span>Items per page:</span>
-                <select name="limit" className="limit" defaultValue="5" onChange={itemsPerPageChangeHandler}>
+                <select name="limit" className="limit" defaultValue="5" onChange={changeUsersPerPageHandler}>
                     <option value={5}>5</option>
                     <option value={10}>10</option>
                     <option value={15}>15</option>
@@ -14,10 +25,10 @@ export default function Pagination({
                 </select>
             </div>
             <p className="pages">
-                1 - 1 of 1
+                {/* {currentPage} - 1 of {Math.ceil(totalUsers.length / usersPerPage)} */}
             </p>
             <div className="actions">
-                <button className="btn" title="First Page">
+                <button className="btn" title="First Page" onClick={setCurrentPage(1)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -34,7 +45,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn" title="Previous Page">
+                <button className="btn" title="Previous Page" onClick={pageChangeHandler(-1)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -51,7 +62,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn" title="Next Page">
+                <button className="btn" title="Next Page" onClick={pageChangeHandler(1)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -68,7 +79,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn" title="Last Page">
+                <button className="btn" title="Last Page" onClick={Math.ceil(users.length / usersPerPage)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
