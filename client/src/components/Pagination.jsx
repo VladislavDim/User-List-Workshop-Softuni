@@ -1,13 +1,13 @@
 export default function Pagination({
     currentPage,
     usersPerPage,
-    usersLength,
+    currentUsers,
     setCurrentPage,
     setUsersPerPage
 }) {
-    const totalPages = Math.ceil(usersLength.length / usersPerPage);
+    const totalPages = Math.ceil(currentUsers.length / usersPerPage);
     const startIndex = (currentPage - 1) * usersPerPage + 1;
-    const endIndex = Math.min(currentPage * usersPerPage, usersLength);
+    const endIndex = Math.min(currentPage * usersPerPage, currentUsers.length);
 
     const pageChangeHandler = (value) => {
         setCurrentPage((state) => {
@@ -33,7 +33,7 @@ export default function Pagination({
                 </select>
             </div>
             <p className="pages">
-               {startIndex} - {endIndex} of {usersLength}
+                {startIndex} - {endIndex} of {currentUsers.length}
             </p>
             <div className="actions">
                 <button className="btn" title="First Page" onClick={() => setCurrentPage(1)}>
@@ -70,6 +70,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
+                <p>{currentPage}</p>
                 <button className="btn" title="Next Page" onClick={() => pageChangeHandler(1)}>
                     <svg
                         aria-hidden="true"

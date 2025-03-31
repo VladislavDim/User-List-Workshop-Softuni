@@ -337,7 +337,7 @@ export default function UserList() {
             <Pagination
                 currentPage={currentPage}
                 usersPerPage={usersPerPage}
-                usersLength={users.length}
+                currentUsers={displayUsers}
                 setCurrentPage={setCurrentPage}
                 setUsersPerPage={setUsersPerPage}
             />
