@@ -34,7 +34,9 @@ export default function UserList() {
     }, [users]);
 
     useEffect(() => {
-        setCurrentUsers(displayUsers.slice((currentPage - 1) * usersPerPage, usersPerPage * currentPage))
+        const startIndex = (currentPage - 1) * usersPerPage;
+        const endIndex = Math.min(startIndex + usersPerPage, displayUsers.length);
+        setCurrentUsers(displayUsers.slice(startIndex, endIndex));
     }, [usersPerPage, currentPage, displayUsers]);
 
     const addUserClickHandler = () => {
@@ -333,8 +335,9 @@ export default function UserList() {
             </div>
             <button className="btn-add btn" onClick={addUserClickHandler}>Add new user</button>
             <Pagination
-                usersPerPage
-                users
+                currentPage={currentPage}
+                usersPerPage={usersPerPage}
+                usersLength={users.length}
                 setCurrentPage={setCurrentPage}
                 setUsersPerPage={setUsersPerPage}
             />

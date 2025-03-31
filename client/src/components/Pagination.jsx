@@ -1,16 +1,24 @@
 export default function Pagination({
+    currentPage,
     usersPerPage,
-    users,
+    usersLength,
     setCurrentPage,
     setUsersPerPage
 }) {
+    const totalPages = Math.ceil(usersLength.length / usersPerPage);
+    const startIndex = (currentPage - 1) * usersPerPage + 1;
+    const endIndex = Math.min(currentPage * usersPerPage, usersLength);
 
     const pageChangeHandler = (value) => {
-        setCurrentPage(state => state + value);
+        setCurrentPage((state) => {
+            const newPage = state + value;
+            return newPage < 1 ? 1 : newPage > totalPages ? totalPages : newPage;
+        });
     };
 
     const changeUsersPerPageHandler = (e) => {
-        setUsersPerPage(e.target.value);
+        setUsersPerPage(Number(e.target.value));
+        setCurrentPage(1);
     };
 
     return (
@@ -25,10 +33,10 @@ export default function Pagination({
                 </select>
             </div>
             <p className="pages">
-                {/* {currentPage} - 1 of {Math.ceil(totalUsers.length / usersPerPage)} */}
+               {startIndex} - {endIndex} of {usersLength}
             </p>
             <div className="actions">
-                <button className="btn" title="First Page" onClick={setCurrentPage(1)}>
+                <button className="btn" title="First Page" onClick={() => setCurrentPage(1)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -45,7 +53,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn" title="Previous Page" onClick={pageChangeHandler(-1)}>
+                <button className="btn" title="Previous Page" onClick={() => pageChangeHandler(-1)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -62,7 +70,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn" title="Next Page" onClick={pageChangeHandler(1)}>
+                <button className="btn" title="Next Page" onClick={() => pageChangeHandler(1)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
@@ -79,7 +87,7 @@ export default function Pagination({
                         ></path>
                     </svg>
                 </button>
-                <button className="btn" title="Last Page" onClick={Math.ceil(users.length / usersPerPage)}>
+                <button className="btn" title="Last Page" onClick={() => setCurrentPage(totalPages)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
